@@ -16,10 +16,13 @@ iterator.
 
 You'll edit this file in Tasks 3a and 3c.
 """
+import datetime
 from itertools import islice
-from typing import Any, Generator
+from typing import Any, Callable, Generator, Optional
 
 import operator
+
+from models import CloseApproach
 
 
 class UnsupportedCriterionError(NotImplementedError):
@@ -73,41 +76,72 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
+        """Create the string representation of the object."""
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
 
 
 class VelocityFilter(AttributeFilter):
+    """Class for filtering according to the velocity of a close approach."""
 
     @classmethod
-    def get(cls, approach):
+    def get(cls, approach: CloseApproach) -> float:
+        """Get the velocity of a  close approach.
+
+        :param approach: A `CloseApproach` instance.
+        :return: The velocity of the close approach object.
+        """
         return approach.velocity
 
 
 class DateFilter(AttributeFilter):
+    """Class for filtering according to the dage of a close approach."""
 
     @classmethod
-    def get(cls, approach):
+    def get(cls, approach: CloseApproach) -> datetime.date:
+        """Get the velocity of a  close approach.
+
+        :param approach: A `CloseApproach` instance.
+        :return: The date of the close approach object sighting.
+        """
         return approach.time.date()
 
 
 class DistanceFilter(AttributeFilter):
+    """Class for filtering according to the distance from earth of a close approach."""
 
     @classmethod
-    def get(cls, approach):
+    def get(cls, approach: CloseApproach) -> float:
+        """Get the velocity of a  close approach.
+
+        :param approach: A `CloseApproach` instance.
+        :return: The distance of the close approach object from earth.
+        """
         return approach.distance
 
 
 class DiameterFilter(AttributeFilter):
+    """Class for filtering according to the diameter of a close approach."""
 
     @classmethod
-    def get(cls, approach):
+    def get(cls, approach: CloseApproach) -> float:
+        """Get the velocity of a  close approach.
+
+        :param approach: A `CloseApproach` instance.
+        :return: The diamater of the close approach object.
+        """
         return approach.neo.diameter
 
 
 class HazFilter(AttributeFilter):
+    """Class for filtering according to whether the close approach is deemed hazardous."""
 
     @classmethod
-    def get(cls, approach):
+    def get(cls, approach: CloseApproach) -> Optional[bool]:
+        """Get the velocity of a  close approach.
+
+        :param approach: A `CloseApproach` instance.
+        :return: Whether the object is deemed hazardous
+        """
         return approach.neo.hazardous
 
 
@@ -147,7 +181,6 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-    # TODO: Decide how you will represent your filters.
     filters = []
     if date is not None:
         filters.append(DateFilter(operator.eq, date))
@@ -191,7 +224,6 @@ def limit(iterator, n=None) -> Generator[Any, None, None]:
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO: Produce at most `n` values from the given iterator.
     if (n is None) or (n == 0):
         n = None
     return islice(iterator, n)
