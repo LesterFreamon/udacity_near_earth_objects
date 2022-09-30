@@ -46,17 +46,14 @@ class NEODatabase:
         self._neos = neos
         self._approaches = approaches
 
-        # TODO: What additional auxiliary data structures will be useful?
         self._neo_name_dict = {neo.name: neo for neo in self._neos if neo.name is not None}
         self._new_des_dict = {neo.designation: neo for neo in self._neos if neo.designation is not None}
         self._neo_designation_dict = {neo.designation: neo for neo in self._neos if neo.designation is not None}
 
-        # TODO: Link together the NEOs and their close approaches.
         self._link_neos_and_approaches()
 
     def _link_neos_and_approaches(self) -> None:
-        """Link the NearEarthObject and CloseApproach"""
-
+        """Link the NearEarthObject and CloseApproach."""
         for approach in self._approaches:
             pde = approach.designation
             if pde is not None:
@@ -77,7 +74,6 @@ class NEODatabase:
         :param designation: The primary designation of the NEO to search for.
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
-        # TODO: Fetch an NEO by its primary designation.
         if designation in self._neo_designation_dict:
             return self._neo_designation_dict[designation]
         return None
@@ -96,7 +92,6 @@ class NEODatabase:
         :param name: The name, as a string, of the NEO to search for.
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
-        # TODO: Fetch an NEO by its name.
         if name in self._neo_name_dict:
             return self._neo_name_dict[name]
 
@@ -116,7 +111,6 @@ class NEODatabase:
         :param filters: A collection of filters capturing user-specified criteria.
         :return: A stream of matching `CloseApproach` objects.
         """
-        # TODO: Generate `CloseApproach` objects that match all of the filters.
         for approach in self._approaches:
             if all((filter(approach) for filter in filters)):
                 yield approach
